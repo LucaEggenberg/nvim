@@ -3,7 +3,7 @@ return {
   dependencies = {
     { 'williamboman/mason.nvim', optional = true },
     { 'williamboman/mason-lsponfig.nvim', optional = true },
-  }
+  },
   config = function()
     local lspconfig = require('lspconfig') 
     
