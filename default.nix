@@ -8,5 +8,5 @@
     mkdir -p $out/.config/nvim/lua
     cp -r $src/lua $out/.config/nvim/
     cp -r $src/init.lua $out/.config/nvim
-  ''
+  '';
 }
