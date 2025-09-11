@@ -1,5 +1,5 @@
 {
-  description = "flake for my neovim configuration";
+  description = "nvim config & devshells";
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
@@ -14,7 +14,7 @@
         "aarch64-darwin"
       ];
 
-      pkgsFor = nixpkg.lib.genAttrs supportedSystems (system:
+      pkgsFor = nixpkgs.lib.genAttrs supportedSystems (system:
         import nixpkgs {
           inherit system;
           config = { allowUnfree = true; };
@@ -23,18 +23,57 @@
   {
     homeModules.default = { config, lib, ... }: {
       config = {
+        programs.neovim = {
+          enable = true;
+          extraConfig = builtins.readFile ./nvim/init.lua;
+        };
         home.packages = with pkgsFor.${config.system}; [
-          neovim 
+          neovim
           gcc
-          
           lua-language-server
-          kdepackages.qtdeclarative #for qmlls
+          nixd
         ];
-
-        home.file.".config/nvim".source = self.packages.${config.system}.default;
       };
-
-      packages = nixpkgs.lib.genAttrs supportedSystems (system: import ./default.nix { pkgs = pkgsFor.${system} });
     };
+
+    devShells = nixpkgs.lib.genAttrs supportedSystems (system:
+      let 
+        pkgs = pkgsFor.${system};
+        basePackages = with pkgs; [
+          neovim
+          gcc
+          glibcLocales
+        ];
+      in
+      {
+        default = pkgs.mkShell {
+          name = "default-dev";
+          packages = basePackages ++ [
+            pkgs.lua-language-server
+            pkgs.nixd
+          ];
+        };
+
+        quickshell = pkgs.mkShell {
+          name = "quickshell-dev";
+          packages = basePackages ++ [
+            pkgs.kdepackages.qtdeclarative
+          ];
+          shellHook = ''
+            export NVIM_QML_LS=true
+          '';
+        };
+
+        csharp = pkgs.mkShell {
+          name = "csharp-dev";
+          packages = basePackages ++ [
+            pkgs.dotnet-sdk
+            pkgs.omnisharp-roslyn
+          ];
+          shellHook = ''
+            export NVIM_CSHARP_LS=true
+          '';
+        };
+      });
   };
 }
