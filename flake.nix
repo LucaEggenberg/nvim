@@ -3,8 +3,6 @@
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
-    home-manager.url = "github.com/nix-community/home-manager";
-    home-manager.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   outputs = { self, nixpkgs, ... }:
@@ -23,16 +21,16 @@
         });
   in
   {
-    homeModules.default = { config, lib, ... }: {
+    homeModules.default = { pkgs, config, lib, ... }: {
       config = {
-        home.packages = with pkgsFor.${config.system}; [
+        home.packages = with pkgs; [
           neovim
           gcc
           lua-language-server
           nixd
         ];
 
-        home.file.".config/nvim".source = config.lib.file.mkOutOfStoreSymlink "${self}/nvim"
+        home.file.".config/nvim".source = config.lib.file.mkOutOfStoreSymlink "${self}/nvim";
       };
     };
 
