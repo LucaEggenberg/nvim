@@ -19,19 +19,21 @@
           inherit system;
           config = { allowUnfree = true; };
         });
-
-      config = config.programs.nvim-config;
   in
   {
-    options.programs.nvim-config = {
-      symlinkPath = nixpkgs.lib.mkOption {
-        type = nixpkgs.lib.types.str;
-        default = "${self}/nvim";
-        description = "the path to symlink into .config/nvim";
+    homeModules.default = { pkgs, config, lib, ... }: 
+    let 
+      cfg = config.programs.nvim-config;
+    in
+    {
+      options.programs.nvim-config = {
+        symlinkPath = nixpkgs.lib.mkOption {
+          type = nixpkgs.lib.types.str;
+          default = "${self}/nvim";
+          description = "the path to symlink into .config/nvim";
+        };
       };
-    };
 
-    homeModules.default = { pkgs, config, lib, ... }: {
       config = {
         home.packages = with pkgs; [
           neovim
@@ -40,7 +42,7 @@
           nixd
         ];
 
-        home.file.".config/nvim".source = config.lib.file.mkOutOfStoreSymlink config.symlinkPath;
+        home.file.".config/nvim".source = config.lib.file.mkOutOfStoreSymlink cfg.symlinkPath;
       };
     };
 
