@@ -21,7 +21,7 @@
         });
   in
   {
-    homeManagerModules.default = { pkgs, config, lib, ... }: 
+    homeModules.default = { pkgs, config, lib, ... }: 
     let 
       cfg = config.programs.nvim-config;
       inherit (lib) mkOption types;
