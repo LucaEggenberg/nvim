@@ -23,12 +23,12 @@
   {
     homeModules.default = { pkgs, config, lib, ... }: 
     let 
-      cfg = options.programs.nvim-config;
+      cfg = config.programs.nvim-config;
     in
     {
       options.programs.nvim-config = {
-        symlinkPath = nixpkgs.lib.mkOption {
-          type = nixpkgs.lib.types.str;
+        symlinkPath = mkOption {
+          type = types.str;
           default = "${self}/nvim";
           description = "the path to symlink into .config/nvim";
         };
