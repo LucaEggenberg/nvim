@@ -23,7 +23,7 @@
   {
     homeModules.default = { pkgs, config, lib, ... }: 
     let 
-      cfg = config.programs.nvim-config;
+      cfg = options.programs.nvim-config;
     in
     {
       options.programs.nvim-config = {
