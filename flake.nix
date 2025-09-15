@@ -21,20 +21,7 @@
         });
   in
   {
-    homeManagerModules.default = { pkgs, config, lib, ... }: 
-    let 
-      cfg = config.programs.nvim-config;
-      inherit (lib) mkOption types;
-    in
-    {
-      options.programs.nvim-config = {
-        symlinkPath = mkOption {
-          type = types.str;
-          default = "${self}/nvim";
-          description = "the path to symlink into .config/nvim";
-        };
-      };
-
+    homeModules.default = { pkgs, config, lib, ... }: {
       config = {
         home.packages = with pkgs; [
           neovim
