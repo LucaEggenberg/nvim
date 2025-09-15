@@ -19,8 +19,18 @@
           inherit system;
           config = { allowUnfree = true; };
         });
+
+      config = config.programs.nvim-config;
   in
   {
+    options.programs.nvim-config = {
+      symlinkPath = lib.mkOption {
+        type = lib.types.str;
+        default = "${self}/nvim";
+        description = "the path to symlink into .config/nvim";
+      };
+    };
+
     homeModules.default = { pkgs, config, lib, ... }: {
       config = {
         home.packages = with pkgs; [
@@ -30,7 +40,7 @@
           nixd
         ];
 
-        home.file.".config/nvim".source = config.lib.file.mkOutOfStoreSymlink "${self}/nvim";
+        home.file.".config/nvim".source = config.lib.file.mkOutOfStoreSymlink config.symlinkPath;
       };
     };
 
