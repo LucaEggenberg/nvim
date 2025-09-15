@@ -30,7 +30,7 @@
           nixd
         ];
 
-        home.file.".config/nvim".source = config.lib.file.mkOutOfStoreSymlink cfg.symlinkPath;
+        home.file.".config/nvim".source = config.lib.file.mkOutOfStoreSymlink "${self}/nvim";
       };
     };
 
