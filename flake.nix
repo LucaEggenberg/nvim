@@ -21,7 +21,20 @@
         });
   in
   {
-    homeModules.default = { pkgs, config, lib, ... }: {
+    homeManagerModules.default = { pkgs, config, lib, ... }: 
+    let 
+      cfg = config.programs.nvim-config;
+      inherit (lib) mkOption types;
+    in
+    {
+      options.programs.nvim-config = {
+        symlinkPath = mkOption {
+          type = types.str;
+          default = "${self}/nvim";
+          description = "the path to symlink into .config/nvim";
+        };
+      };
+
       config = {
         home.packages = with pkgs; [
           neovim
@@ -30,7 +43,7 @@
           nixd
         ];
 
-        home.file.".config/nvim".source = config.lib.file.mkOutOfStoreSymlink "${self}/nvim";
+        home.file.".config/nvim".source = config.lib.file.mkOutOfStoreSymlink cfg.symlinkPath;
       };
     };
 
