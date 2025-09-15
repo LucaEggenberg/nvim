@@ -5,7 +5,7 @@
     nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
   };
 
-  outputs = { self, nixpkgs, lib, ... }:
+  outputs = { self, nixpkgs, ... }:
   let
       supportedSystems = [
         "x86_64-linux"
@@ -24,8 +24,8 @@
   in
   {
     options.programs.nvim-config = {
-      symlinkPath = lib.mkOption {
-        type = lib.types.str;
+      symlinkPath = nixpkgs.lib.mkOption {
+        type = nixpkgs.lib.types.str;
         default = "${self}/nvim";
         description = "the path to symlink into .config/nvim";
       };
