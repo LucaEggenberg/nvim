@@ -67,7 +67,7 @@
         quickshell = pkgs.mkShell {
           name = "quickshell-dev";
           packages = basePackages ++ [
-            pkgs.kdepackages.qtdeclarative
+            pkgs.kdePackages.qtdeclarative
           ];
           shellHook = ''
             export NVIM_QML_LS=true
