@@ -46,44 +46,5 @@
         home.file.".config/nvim".source = config.lib.file.mkOutOfStoreSymlink cfg.symlinkPath;
       };
     };
-
-    devShells = nixpkgs.lib.genAttrs supportedSystems (system:
-      let 
-        pkgs = pkgsFor.${system};
-        basePackages = with pkgs; [
-          gcc
-          glibcLocales
-        ];
-      in
-      {
-        default = pkgs.mkShell {
-          name = "default-dev";
-          packages = basePackages ++ [
-            pkgs.lua-language-server
-            pkgs.nixd
-          ];
-        };
-
-        quickshell = pkgs.mkShell {
-          name = "quickshell-dev";
-          packages = basePackages ++ [
-            pkgs.kdePackages.qtdeclarative
-          ];
-          shellHook = ''
-            export NVIM_QML_LS=true
-          '';
-        };
-
-        csharp = pkgs.mkShell {
-          name = "csharp-dev";
-          packages = basePackages ++ [
-            pkgs.dotnet-sdk
-            pkgs.omnisharp-roslyn
-          ];
-          shellHook = ''
-            export NVIM_CSHARP_LS=true
-          '';
-        };
-      });
   };
 }
